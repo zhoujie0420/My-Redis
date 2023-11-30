@@ -62,7 +62,7 @@ public final class CacheBs<K, V> {
     /**
      * 设置驱除策略
      */
-    public CacheBs<K, V> cacheEvict(ICacheEvict<K, V> cacheEvict) {
+    public CacheBs<K, V> evict(ICacheEvict<K, V> cacheEvict) {
         this.evict = cacheEvict;
         return this;
     }

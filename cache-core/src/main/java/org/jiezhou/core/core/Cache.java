@@ -3,7 +3,9 @@ package org.jiezhou.core.core;
 import org.jiezhou.api.ICache;
 import org.jiezhou.api.ICacheContext;
 import org.jiezhou.api.ICacheEvict;
+import org.jiezhou.api.ICacheExpire;
 import org.jiezhou.core.support.evict.CacheEvictContext;
+import org.jiezhou.core.support.expire.CacheExpire;
 
 import java.util.Collection;
 import java.util.Map;
@@ -15,6 +17,10 @@ import java.util.Set;
 
 public class Cache<K, V> implements ICache<K, V> {
 
+    /**
+     * 过期策略
+     */
+    private final ICacheExpire<K, V> cacheExpire;
     private final Map<K, V> map;
 
     private final int sizeLimit;
@@ -25,41 +31,49 @@ public class Cache<K, V> implements ICache<K, V> {
         this.map = context.map();
         this.sizeLimit = context.size();
         this.cacheEvict = context.cacheEvict();
+        this.cacheExpire = new CacheExpire<>(this);
     }
 
     @Override
     public ICache<K, V> expire(K key, long timeInMills) {
-        throw new UnsupportedOperationException();
+        long expireAt = System.currentTimeMillis() + timeInMills;
+        return expireAt(key, expireAt);
     }
 
     @Override
     public ICache<K, V> expireAt(K key, long timeInMills) {
-        throw new UnsupportedOperationException();
+        cacheExpire.expire(key, timeInMills);
+        return this;
     }
 
     @Override
     public int size() {
+        this.refreshExpireAllKeys();
         return map.size();
     }
 
     @Override
     public boolean isEmpty() {
+        this.refreshExpireAllKeys();
         return map.isEmpty();
     }
 
     @Override
     public boolean containsKey(Object key) {
+        this.refreshExpireAllKeys();
         return map.containsKey(key);
     }
 
     @Override
     public boolean containsValue(Object value) {
-
+        this.refreshExpireAllKeys();
         return map.containsValue(value);
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public V get(Object key) {
+        this.refreshExpireAllKeys();
         return map.get(key);
     }
 
@@ -106,16 +120,27 @@ public class Cache<K, V> implements ICache<K, V> {
 
     @Override
     public Set<K> keySet() {
+        this.refreshExpireAllKeys();
         return map.keySet();
     }
 
     @Override
     public Collection<V> values() {
+        this.refreshExpireAllKeys();
         return map.values();
     }
 
     @Override
     public Set<Entry<K, V>> entrySet() {
+        this.refreshExpireAllKeys();
         return map.entrySet();
+    }
+
+    /**
+     * 刷新懒过期处理所有的 keys
+     * @since 0.0.3
+     */
+    private void refreshExpireAllKeys() {
+        this.cacheExpire.refreshExpire(map.keySet());
     }
 }
