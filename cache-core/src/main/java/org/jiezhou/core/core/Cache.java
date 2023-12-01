@@ -1,5 +1,6 @@
 package org.jiezhou.core.core;
 
+import org.jiezhou.annotation.Refresh;
 import org.jiezhou.api.ICache;
 import org.jiezhou.api.ICacheContext;
 import org.jiezhou.api.ICacheEvict;
@@ -17,21 +18,30 @@ import java.util.Set;
 
 public class Cache<K, V> implements ICache<K, V> {
 
+    private  Map<K, V> map;
+
+    private  int sizeLimit;
+
+    private  ICacheEvict<K, V> cacheEvict;
+
+
     /**
      * 过期策略
      */
-    private final ICacheExpire<K, V> cacheExpire;
-    private final Map<K, V> map;
+    private  ICacheExpire<K, V> cacheExpire = new CacheExpire<>(this);
+    public Cache<K, V> map(Map<K, V> map) {
+        this.map = map;
+        return this;
+    }
 
-    private final int sizeLimit;
+    public Cache<K,V> sizeLimit(int sizeLimit) {
+        this.sizeLimit = sizeLimit;
+        return this;
+    }
 
-    private final ICacheEvict<K, V> cacheEvict;
-
-    public Cache(ICacheContext<K, V> context) {
-        this.map = context.map();
-        this.sizeLimit = context.size();
-        this.cacheEvict = context.cacheEvict();
-        this.cacheExpire = new CacheExpire<>(this);
+    public Cache<K,V> cacheEvict(ICacheEvict<K, V> cacheEvict) {
+        this.cacheEvict = cacheEvict;
+        return this;
     }
 
     @Override
@@ -46,34 +56,36 @@ public class Cache<K, V> implements ICache<K, V> {
         return this;
     }
 
+    public ICacheExpire<K, V> cacheExpire() {
+        return this.cacheExpire;
+    }
     @Override
     public int size() {
-        this.refreshExpireAllKeys();
         return map.size();
     }
 
     @Override
+   @Refresh
     public boolean isEmpty() {
-        this.refreshExpireAllKeys();
         return map.isEmpty();
     }
 
     @Override
+    @Refresh
     public boolean containsKey(Object key) {
-        this.refreshExpireAllKeys();
         return map.containsKey(key);
     }
 
     @Override
+    @Refresh
     public boolean containsValue(Object value) {
-        this.refreshExpireAllKeys();
         return map.containsValue(value);
     }
 
     @Override
+    @Refresh
     @SuppressWarnings("unchecked")
     public V get(Object key) {
-        this.refreshExpireAllKeys();
         return map.get(key);
     }
 
@@ -114,33 +126,28 @@ public class Cache<K, V> implements ICache<K, V> {
     }
 
     @Override
+    @Refresh
     public void clear() {
         map.clear();
     }
 
     @Override
+    @Refresh
     public Set<K> keySet() {
-        this.refreshExpireAllKeys();
         return map.keySet();
     }
 
     @Override
+    @Refresh
     public Collection<V> values() {
-        this.refreshExpireAllKeys();
         return map.values();
     }
 
     @Override
+    @Refresh
     public Set<Entry<K, V>> entrySet() {
-        this.refreshExpireAllKeys();
         return map.entrySet();
     }
 
-    /**
-     * 刷新懒过期处理所有的 keys
-     * @since 0.0.3
-     */
-    private void refreshExpireAllKeys() {
-        this.cacheExpire.refreshExpire(map.keySet());
-    }
+
 }

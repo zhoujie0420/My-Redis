@@ -5,6 +5,7 @@ import org.jiezhou.api.ICache;
 import org.jiezhou.api.ICacheEvict;
 import org.jiezhou.core.core.Cache;
 import org.jiezhou.core.support.evict.CacheEvicts;
+import org.jiezhou.core.support.proxy.CacheProxy;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,10 +72,10 @@ public final class CacheBs<K, V> {
      * 构建缓存信息
      */
     public ICache<K, V> build() {
-        CacheContext<K, V> context = new CacheContext<>();
-        context.cacheEvict(evict);
-        context.map(map);
-        context.size(size);
-        return new Cache<>(context);
+        Cache<K,V> cache = new Cache<>();
+        cache.map(map);
+        cache.cacheEvict(evict);
+        cache.sizeLimit(size);
+        return CacheProxy.getProxy(cache);
     }
 }
