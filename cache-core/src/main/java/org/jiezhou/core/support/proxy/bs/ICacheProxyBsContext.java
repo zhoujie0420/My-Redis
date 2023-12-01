@@ -1,6 +1,6 @@
 package org.jiezhou.core.support.proxy.bs;
 
-import org.jiezhou.annotation.Refresh;
+import org.jiezhou.annotation.CacheInterceptor;
 import org.jiezhou.api.ICache;
 
 import java.lang.reflect.Method;
@@ -11,10 +11,9 @@ import java.lang.reflect.Method;
 
 public interface ICacheProxyBsContext {
     /**
-     * 刷新信息
+     * 拦截器
      */
-    Refresh refresh();
-
+    CacheInterceptor interceptor();
     /**
      * 获取代理对象信息
      */
