@@ -1,7 +1,7 @@
 package org.jiezhou.core.support.common;
 
-import com.github.houbb.log.integration.core.Log;
-import com.github.houbb.log.integration.core.LogFactory;
+
+import cn.hutool.log.Log;
 import org.jiezhou.api.ICacheInterceptor;
 import org.jiezhou.api.ICacheInterceptorContext;
 
@@ -10,7 +10,7 @@ import org.jiezhou.api.ICacheInterceptorContext;
  **/
 
 public class CacheInterceptorCost<K, V> implements ICacheInterceptor<K, V> {
-    private static final Log log = LogFactory.getLog(CacheInterceptorCost.class);
+    private static final Log log = Log.get();
 
     @Override
     public void before(ICacheInterceptorContext<K, V> context) {

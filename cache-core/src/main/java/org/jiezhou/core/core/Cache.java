@@ -1,13 +1,12 @@
 package org.jiezhou.core.core;
 
 import org.jiezhou.annotation.CacheInterceptor;
-import org.jiezhou.api.ICache;
-import org.jiezhou.api.ICacheEvict;
-import org.jiezhou.api.ICacheExpire;
+import org.jiezhou.api.*;
 import org.jiezhou.core.support.evict.CacheEvictContext;
 import org.jiezhou.core.support.expire.CacheExpire;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,6 +22,21 @@ public class Cache<K, V> implements ICache<K, V> {
 
     private ICacheEvict<K, V> cacheEvict;
 
+
+    /**
+     * 删除监听类
+     */
+    private List<ICacheRemoveListener<K, V>> removeListeners;
+
+    @Override
+    public List<ICacheRemoveListener<K, V>> removeListeners() {
+        return this.removeListeners;
+    }
+
+    public Cache<K, V> removeListeners(List<ICacheRemoveListener<K, V>> removeListeners) {
+        this.removeListeners = removeListeners;
+        return this;
+    }
 
     /**
      * 过期策略
@@ -101,7 +115,12 @@ public class Cache<K, V> implements ICache<K, V> {
         //1 尝试驱除
         CacheEvictContext<K, V> context = new CacheEvictContext<>();
         context.key(key).size(sizeLimit).cache(this);
-        cacheEvict.evict(context);
+        boolean evict = cacheEvict.evict(context);
+        if (evict) {
+            // 执行淘汰策略
+
+
+        }
 
         //2.判断驱除后的信息
         if (isSizeLimit()) {

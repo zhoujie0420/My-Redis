@@ -10,7 +10,7 @@ import org.jiezhou.api.ICacheEvictContext;
 public class CacheEvictNone<K, V> implements ICacheEvict<K, V> {
 
     @Override
-    public void evict(ICacheEvictContext<K, V> context) {
-
+    public boolean evict(ICacheEvictContext<K, V> context) {
+        return false;
     }
 }

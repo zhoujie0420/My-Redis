@@ -3,11 +3,15 @@ package org.jiezhou.core.bs;
 import com.github.houbb.heaven.util.common.ArgUtil;
 import org.jiezhou.api.ICache;
 import org.jiezhou.api.ICacheEvict;
+import org.jiezhou.api.ICacheRemoveListener;
 import org.jiezhou.core.core.Cache;
 import org.jiezhou.core.support.evict.CacheEvicts;
+import org.jiezhou.core.support.listener.CacheRemoveListener;
+import org.jiezhou.core.support.listener.CacheRemoveListeners;
 import org.jiezhou.core.support.proxy.CacheProxy;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -43,6 +47,11 @@ public final class CacheBs<K, V> {
     private ICacheEvict<K, V> evict = CacheEvicts.fifo();
 
     /**
+     * 删除监听类
+     */
+    private List<ICacheRemoveListener<K,V>> removeListeners = CacheRemoveListeners.defaults();
+
+    /**
      * map实现
      */
     public CacheBs<K, V> map(Map<K, V> map) {
@@ -60,10 +69,23 @@ public final class CacheBs<K, V> {
         return this;
     }
 
+
+    /**
+     * 添加监听策略器
+     */
+    public CacheBs<K, V> addRemoveListener(ICacheRemoveListener<K,V> listener) {
+        ArgUtil.notNull(listener, "listener");
+
+        this.removeListeners.add(listener);
+        return this;
+    }
+
+
     /**
      * 设置驱除策略
      */
     public CacheBs<K, V> evict(ICacheEvict<K, V> cacheEvict) {
+        ArgUtil.notNull(evict,"evict");
         this.evict = cacheEvict;
         return this;
     }
@@ -76,6 +98,7 @@ public final class CacheBs<K, V> {
         cache.map(map);
         cache.cacheEvict(evict);
         cache.sizeLimit(size);
+        cache.removeListeners(removeListeners);
         return CacheProxy.getProxy(cache);
     }
 }

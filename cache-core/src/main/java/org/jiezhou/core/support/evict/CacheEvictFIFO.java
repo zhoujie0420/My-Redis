@@ -24,7 +24,8 @@ public class CacheEvictFIFO<K, V> implements ICacheEvict<K, V> {
     private Queue<K> queue = new LinkedList<>();
 
     @Override
-    public void evict(ICacheEvictContext<K, V> context) {
+    public boolean evict(ICacheEvictContext<K, V> context) {
+        boolean result = false;
         final ICache<K, V> cache = context.cache();
         //超过限制，驱除
         if (cache.size() > context.size()) {
@@ -32,8 +33,10 @@ public class CacheEvictFIFO<K, V> implements ICacheEvict<K, V> {
             K evictKey = queue.remove();
             // 移除最开始的元素
             cache.remove(evictKey);
+            result = true;
         }
         //添加
         queue.add(context.key());
+        return result;
     }
 }

@@ -1,5 +1,6 @@
 package org.jiezhou.api;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -7,6 +8,8 @@ import java.util.Map;
  **/
 
 public interface ICache<K,V> extends Map<K,V> {
+    List<ICacheRemoveListener<K, V>> removeListeners();
+
     /** 设置过期时间
      * （1）如果 key 不存在，则什么都不做。
      * （2）暂时不提供新建 key 指定过期时间的方式，会破坏原来的方法。
@@ -53,5 +56,7 @@ public interface ICache<K,V> extends Map<K,V> {
      * @since 0.0.4
      */
     ICacheExpire<K,V> cacheExpire();
+
+
 
 }
