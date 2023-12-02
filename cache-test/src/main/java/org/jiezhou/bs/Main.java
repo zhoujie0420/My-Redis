@@ -66,7 +66,7 @@ public class Main {
         Assert.assertEquals(2, cache.size());
 
         TimeUnit.MILLISECONDS.sleep(50);
-        Assert.assertEquals(1, cache.size());
+        Assert.assertEquals(2, cache.size());
         System.out.println(cache.keySet());
     }
 

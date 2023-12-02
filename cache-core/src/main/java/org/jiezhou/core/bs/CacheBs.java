@@ -1,12 +1,12 @@
 package org.jiezhou.core.bs;
 
 import com.github.houbb.heaven.util.common.ArgUtil;
+import lombok.*;
 import org.jiezhou.api.ICache;
 import org.jiezhou.api.ICacheEvict;
 import org.jiezhou.api.ICacheRemoveListener;
 import org.jiezhou.core.core.Cache;
 import org.jiezhou.core.support.evict.CacheEvicts;
-import org.jiezhou.core.support.listener.CacheRemoveListener;
 import org.jiezhou.core.support.listener.CacheRemoveListeners;
 import org.jiezhou.core.support.proxy.CacheProxy;
 
@@ -18,10 +18,13 @@ import java.util.Map;
  * @author: jiezhou
  **/
 
-public final class CacheBs<K, V> {
 
-    private CacheBs() {
-    }
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public final class CacheBs<K, V> {
 
     /**
      * 创建实例对象
@@ -75,7 +78,6 @@ public final class CacheBs<K, V> {
      */
     public CacheBs<K, V> addRemoveListener(ICacheRemoveListener<K,V> listener) {
         ArgUtil.notNull(listener, "listener");
-
         this.removeListeners.add(listener);
         return this;
     }
