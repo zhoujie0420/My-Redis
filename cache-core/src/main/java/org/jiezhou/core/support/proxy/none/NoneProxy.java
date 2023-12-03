@@ -7,6 +7,8 @@ import java.lang.reflect.Method;
 
 /**
  * @author: jiezhou
+ *
+ * 没有代理
  **/
 
 public class NoneProxy implements InvocationHandler, ICacheProxy {
@@ -22,6 +24,10 @@ public class NoneProxy implements InvocationHandler, ICacheProxy {
         return method.invoke(proxy,args);
     }
 
+    /**
+     * 返回原始对象，没有代理
+     * @return
+     */
     @Override
     public Object proxy() {
         return this.target;

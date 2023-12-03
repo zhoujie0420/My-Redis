@@ -1,5 +1,10 @@
 package org.jiezhou.api;
 
+/**
+ * 清除监听器上下文
+ * @param <K>
+ * @param <V>
+ */
 public interface ICacheRemoveListenerContext <K,V>{
     /**
      * 清空 key
@@ -14,6 +19,5 @@ public interface ICacheRemoveListenerContext <K,V>{
     /**
      * 删除类型
      */
-
     String type();
 }

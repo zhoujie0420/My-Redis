@@ -6,7 +6,6 @@ import java.util.Map;
  * @author: jiezhou
  * 缓存上下文
  **/
-
 public interface ICacheContext<K,V> {
     /**
      * map信息

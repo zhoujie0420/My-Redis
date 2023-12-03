@@ -1,8 +1,10 @@
 package org.jiezhou.core.support.interceptor;
 
 import org.jiezhou.api.ICacheInterceptor;
-import org.jiezhou.core.support.common.CacheInterceptorCost;
-import org.jiezhou.core.support.refresh.CacheInterceptorRefresh;
+import org.jiezhou.core.support.interceptor.aof.CacheInterceptorAof;
+import org.jiezhou.core.support.interceptor.common.CacheInterceptorCost;
+import org.jiezhou.core.support.interceptor.evict.CacheInterceptorEvict;
+import org.jiezhou.core.support.interceptor.refresh.CacheInterceptorRefresh;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,4 +30,24 @@ public final class CacheInterceptors {
         list.add(new CacheInterceptorRefresh());
         return list;
     }
+
+
+    /**
+     * AOF 模式
+     * @return 结果
+     */
+    @SuppressWarnings("all")
+    public static ICacheInterceptor aof() {
+        return new CacheInterceptorAof();
+    }
+
+    /**
+     * 驱除策略拦截器
+     * @return 结果
+     */
+    @SuppressWarnings("all")
+    public static ICacheInterceptor evict() {
+        return new CacheInterceptorEvict();
+    }
+
 }

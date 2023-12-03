@@ -17,31 +17,26 @@ public class CacheInterceptorContext <K,V> implements ICacheInterceptorContext<K
 
     /**
      * 执行的方法信息
-     * @since 0.0.5
      */
     private Method method;
 
     /**
      * 执行的参数
-     * @since 0.0.5
      */
     private Object[] params;
 
     /**
      * 方法执行的结果
-     * @since 0.0.5
      */
     private Object result;
 
     /**
      * 开始时间
-     * @since 0.0.5
      */
     private long startMills;
 
     /**
      * 结束时间
-     * @since 0.0.5
      */
     private long endMills;
 

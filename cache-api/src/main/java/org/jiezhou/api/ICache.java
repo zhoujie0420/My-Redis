@@ -8,8 +8,6 @@ import java.util.Map;
  **/
 
 public interface ICache<K,V> extends Map<K,V> {
-    List<ICacheRemoveListener<K, V>> removeListeners();
-
     /** 设置过期时间
      * （1）如果 key 不存在，则什么都不做。
      * （2）暂时不提供新建 key 指定过期时间的方式，会破坏原来的方法。
@@ -44,7 +42,6 @@ public interface ICache<K,V> extends Map<K,V> {
      */
     ICache<K,V> expire(final K key, final long timeInMills);
 
-
     /**
      * 在指定的时间过期
      */
@@ -53,10 +50,32 @@ public interface ICache<K,V> extends Map<K,V> {
     /**
      * 获取缓存的过期处理类
      * @return 处理类实现
-     * @since 0.0.4
+     * */
+    ICacheExpire<K,V> expire();
+
+    /**
+     * 删除监听类列表
+     * @return
      */
-    ICacheExpire<K,V> cacheExpire();
+    List<ICacheRemoveListener<K, V>> removeListeners();
 
+    /**
+     * 慢日志监听类列表
+     */
+    List<ICacheSlowListener> slowListeners();
 
+    /**
+     * 加载信息
+     */
+    ICacheLoad<K,V> load();
 
+    /**
+     * 持久化类
+     */
+    ICachePersist<K,V> persist();
+
+    /**
+     * 淘汰策略
+     */
+    ICacheEvict<K,V> evict();
 }

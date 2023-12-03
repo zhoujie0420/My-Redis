@@ -5,8 +5,9 @@ import com.github.houbb.heaven.util.util.MapUtil;
 import org.jiezhou.api.ICache;
 import org.jiezhou.api.ICacheExpire;
 import org.jiezhou.api.ICacheRemoveListener;
+import org.jiezhou.api.ICacheRemoveListenerContext;
 import org.jiezhou.core.constant.enums.CacheRemoveType;
-import org.jiezhou.core.support.listener.CacheRemoveListenerContext;
+import org.jiezhou.core.support.listener.remove.CacheRemoveListenerContext;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -110,6 +111,34 @@ public class CacheExpire<K, V> implements ICacheExpire<K, V> {
                 if (keys.contains(entry.getKey())) {
                     this.expirKey(entry.getKey(), entry.getValue());
                 }
+            }
+        }
+    }
+    @Override
+    public Long expireTime(K key) {
+        return expireMap.get(key);
+    }
+
+    /**
+     * 过期处理 key
+     * @param key key
+     * @param expireAt 过期时间
+     */
+    private void expireKey(final K key, final Long expireAt) {
+        if(expireAt == null) {
+            return;
+        }
+
+        long currentTime = System.currentTimeMillis();
+        if(currentTime >= expireAt) {
+            expireMap.remove(key);
+            // 再移除缓存，后续可以通过惰性删除做补偿
+            V removeValue = cache.remove(key);
+
+            // 执行淘汰监听器
+            ICacheRemoveListenerContext<K,V> removeListenerContext = CacheRemoveListenerContext.<K,V>newInstance().key(key).value(removeValue).type(CacheRemoveType.EXPIRE.code());
+            for(ICacheRemoveListener<K,V> listener : cache.removeListeners()) {
+                listener.listen(removeListenerContext);
             }
         }
     }

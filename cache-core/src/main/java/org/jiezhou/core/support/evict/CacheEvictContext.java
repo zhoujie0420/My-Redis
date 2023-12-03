@@ -1,7 +1,6 @@
 package org.jiezhou.core.support.evict;
 
 import org.jiezhou.api.ICache;
-import org.jiezhou.api.ICacheContext;
 import org.jiezhou.api.ICacheEvictContext;
 
 /**

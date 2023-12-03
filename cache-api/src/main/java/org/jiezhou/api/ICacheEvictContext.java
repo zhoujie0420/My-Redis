@@ -16,7 +16,6 @@ public interface ICacheEvictContext<K,V> {
      */
     K key();
 
-
     /**
      * cache 实现
      */

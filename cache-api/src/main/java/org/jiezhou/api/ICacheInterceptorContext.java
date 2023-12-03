@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 
 /**
  * @author: jiezhou
+ * 拦截器上下文接口
  **/
 
 public interface ICacheInterceptorContext<K, V> {

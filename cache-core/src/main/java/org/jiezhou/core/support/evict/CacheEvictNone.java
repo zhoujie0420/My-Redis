@@ -1,5 +1,6 @@
 package org.jiezhou.core.support.evict;
 
+import org.jiezhou.api.ICacheEntry;
 import org.jiezhou.api.ICacheEvict;
 import org.jiezhou.api.ICacheEvictContext;
 
@@ -7,10 +8,11 @@ import org.jiezhou.api.ICacheEvictContext;
  * @author: jiezhou
  **/
 
-public class CacheEvictNone<K, V> implements ICacheEvict<K, V> {
+public class CacheEvictNone<K,V> extends AbstractCacheEvict<K,V> {
 
     @Override
-    public boolean evict(ICacheEvictContext<K, V> context) {
-        return false;
+    protected ICacheEntry<K, V> doEvict(ICacheEvictContext<K, V> context) {
+        return null;
     }
+
 }

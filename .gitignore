@@ -1,1 +1,4 @@
 /.idea/
+/cache-test/target/
+/cache-api/target/
+/cache-core/target/

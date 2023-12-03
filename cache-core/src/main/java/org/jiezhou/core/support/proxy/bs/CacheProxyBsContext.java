@@ -32,8 +32,7 @@ public class CacheProxyBsContext implements ICacheProxyBsContext {
     private Method method;
 
     /**
-     * 刷新信息
-     *
+     * 拦截器
      * @return
      */
     private CacheInterceptor interceptor;
@@ -83,7 +82,6 @@ public class CacheProxyBsContext implements ICacheProxyBsContext {
     public Method method() {
         return method;
     }
-
 
     public CacheProxyBsContext method(Method method) {
         this.method = method;

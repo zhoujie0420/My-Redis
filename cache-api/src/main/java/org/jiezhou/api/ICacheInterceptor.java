@@ -3,6 +3,9 @@ package org.jiezhou.api;
 /**
  * @author: jiezhou
  * 拦截器接口
+ *
+ * 耗时统计
+ * 监听器
  **/
 
 public interface ICacheInterceptor<K,V> {
